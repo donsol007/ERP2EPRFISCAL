@@ -34,7 +34,7 @@ def get_token():
             frappe.local.session.data.csrf_token = token
         else:
             token = frappe.local.session.data.csrf_token
-        frappe.log_error("Valid Returned Token", token)
+        #frappe.log_error("Valid Returned Token", token)
 
         frappe.response["message"] = token
     except Exception as e:
@@ -86,6 +86,7 @@ def send_invoice_to_cloud(
     invoice_comment, original_invoice_no, global_invoice_no, items_xml
 ):
     try:
+        frappe.log_error("Token", get_token())
         data = json.loads(get_token())
         ftoken = data.get("message")
         print("Sending Request to HavanoZimra")
