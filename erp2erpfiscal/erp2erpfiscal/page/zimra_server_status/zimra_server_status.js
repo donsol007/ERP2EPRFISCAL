@@ -22,13 +22,13 @@ frappe.pages['zimra-server-status'].on_page_load = function(wrapper) {
         <div><p style="font-size:16px;">If the Initial status is down, click the refresh button to get the server status.</p></div>
         <div class="server-status-container" style="display: flex; justify-content: center; align-items: center; gap: 50px; margin-top: 50px;">
             <div id="test-server" class="server-box">
-                <img src="/assets/havanozimracloud/images/zimra_logo.png" class="server-logo" alt="ZIMRA Logo">
+                <img src="/assets/erp2erpfiscal/images/zimra_logo.png" class="server-logo" alt="ZIMRA Logo">
                 <h4>ZIMRA TEST SERVER</h4>
                 <hr>
                 <p class="status-label">Status: <span class="status-text">Checking...</span></p>
             </div>
             <div id="prod-server" class="server-box">
-                <img src="/assets/havanozimracloud/images/zimra_logo.png" class="server-logo" alt="ZIMRA Logo">
+                <img src="/assets/erp2erpfiscal/images/zimra_logo.png" class="server-logo" alt="ZIMRA Logo">
                 <h4>PRODUCTION SERVER</h4>
                 <hr>
                 <p class="status-label">Status: <span class="status-text">Checking...</span></p>
