@@ -25,6 +25,7 @@ hcloud_secret = get_config_value("api_secret")
 hcloud_devicesn = get_config_value("device_serial_number")
 ftoken  = ""
 s_invoice_name=""
+
 @frappe.whitelist()
 def get_token():
     try:
@@ -36,7 +37,7 @@ def get_token():
             token = frappe.local.session.data.csrf_token
         #frappe.log_error("Valid Returned Token", token)
 
-        frappe.response["message"] = token
+        return token
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Unable to get token")
 
@@ -87,7 +88,8 @@ def send_invoice_to_cloud(
 ):
     try:
         frappe.log_error("Token", get_token())
-        data = json.loads(get_token())
+        #data = json.loads(get_token())
+        data = get_token()
         ftoken = data.get("message")
         print("Sending Request to HavanoZimra")
         url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.sendinvoice"
