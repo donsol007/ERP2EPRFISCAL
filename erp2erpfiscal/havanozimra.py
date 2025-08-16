@@ -89,8 +89,8 @@ def send_invoice_to_cloud(
     try:
         frappe.log_error("Token", get_token())
         #data = json.loads(get_token())
-        data = get_token()
-        ftoken = data.get("message")
+        ftoken = get_token()
+        #ftoken = data.get("message")
         print("Sending Request to HavanoZimra")
         url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.sendinvoice"
         headers = {
