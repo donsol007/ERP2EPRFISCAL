@@ -28,6 +28,7 @@ s_invoice_name=""
 @frappe.whitelist()
 def get_token():
     try:
+        token=""
         if not frappe.local.session.data.csrf_token:
             token = frappe.generate_hash()
             frappe.local.session.data.csrf_token = token
