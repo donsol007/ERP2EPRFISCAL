@@ -34,6 +34,7 @@ def get_token():
             frappe.local.session.data.csrf_token = token
         else:
             token = frappe.local.session.data.csrf_token
+        frappe.log_error("Valid Returned Token", token)
 
         frappe.response["message"] = token
     except Exception as e:
