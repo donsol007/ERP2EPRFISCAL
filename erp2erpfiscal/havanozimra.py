@@ -102,8 +102,11 @@ def send_invoice_to_cloud(
         #print("Payload:", data)
         with httpx.Client() as client:
             response =  client.post(url, data=data, headers=headers)
+            frappe.log_error(response.text, "Invoice Successfully Sent")
             return response.text
+    
     except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Failed to send Sales Invoice")
         return str(e)
 
 def remove_newlines(text: str) -> str:
@@ -286,6 +289,7 @@ def send(doc,method):
         update_sales_invoice(invoice_number, 1,message_data.get("receiptGlobalNo"),message_data.get("FiscalDay"),message_data.get("EFDSERIAL"),message_data.get("DeviceID"),message_data.get("QRcode"),message_data.get("VerificationCode"))
         time.sleep(2)
     except Exception as e:
+        frappe.log_error(frappe.get_traceback(),"Error Updateing Invoice")
         return response_msg
 
     
