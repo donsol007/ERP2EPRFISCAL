@@ -27,6 +27,20 @@ ftoken  = ""
 s_invoice_name=""
 @frappe.whitelist()
 def get_token():
+    try:
+        if not frappe.local.session.data.csrf_token:
+            token = frappe.generate_hash()
+            frappe.local.session.data.csrf_token = token
+        else:
+            token = frappe.local.session.data.csrf_token
+
+        frappe.response["message"] = token
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Unable to get token")
+
+
+@frappe.whitelist()
+def get_token1():
     api_url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.token"
     print(api_url)
     result = ""
