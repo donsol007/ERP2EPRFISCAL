@@ -125,7 +125,7 @@ def send_invoice_to_cloud(
         #print("Payload:", data)
         with httpx.Client() as client:
             response =  client.post(url, data=data, headers=headers)
-            frappe.log_error(response.text, "Invoice Successfully Sent")
+            frappe.log_error("Invoice Successfully Sent", "Invoice Status")
             return response.text
     
     except Exception as e:
