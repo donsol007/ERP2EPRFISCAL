@@ -48,6 +48,7 @@ def get_token():
                 #print(result)
                 data = json.loads(result)
                 if "message" in data:
+                    frappe.log_error(result, "Returned Token")
                     return result
                 else:
                     frappe.log_error(result, "Token: Bad Json Response")
