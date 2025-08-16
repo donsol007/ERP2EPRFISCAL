@@ -43,15 +43,17 @@ def get_token():
         ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2
         with httpx.Client(verify=ssl_context, cookies=cookies) as client:
             response = client.get(api_url)
+            frappe.log_error("Returned Token", response)
+
             if response.status_code == 200:
                 result = response.text
                 #print(result)
                 data = json.loads(result)
                 if "message" in data:
-                    frappe.log_error(result, "Returned Token")
+                    frappe.log_error("Valid Returned Token", result)
                     return result
                 else:
-                    frappe.log_error(result, "Token: Bad Json Response")
+                    frappe.log_error("Token: Bad Json Response", result)
                     return f"No 'message' key in response: {result}"
             else:
                 return response.text
