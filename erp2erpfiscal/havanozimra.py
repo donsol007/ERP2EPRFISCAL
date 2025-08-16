@@ -27,7 +27,7 @@ ftoken  = ""
 s_invoice_name=""
 
 @frappe.whitelist()
-def get_token():
+def get_token2():
     try:
         token=""
         if not frappe.local.session.data.csrf_token:
@@ -43,7 +43,7 @@ def get_token():
 
 
 @frappe.whitelist()
-def get_token1():
+def get_token():
     api_url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.token"
     print(api_url)
     result = ""
@@ -87,10 +87,9 @@ def send_invoice_to_cloud(
     invoice_comment, original_invoice_no, global_invoice_no, items_xml
 ):
     try:
-        frappe.log_error("Token", get_token())
-        #data = json.loads(get_token())
-        ftoken = get_token()
-        #ftoken = data.get("message")
+        #frappe.log_error("Token", get_token())
+        data = json.loads(get_token())
+        ftoken = data.get("message")
         print("Sending Request to HavanoZimra")
         url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.sendinvoice"
         headers = {
