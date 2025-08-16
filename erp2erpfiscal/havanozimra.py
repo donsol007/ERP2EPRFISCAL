@@ -50,10 +50,12 @@ def get_token():
                 if "message" in data:
                     return result
                 else:
+                    frappe.log_error(result, "Token: Bad Json Response")
                     return f"No 'message' key in response: {result}"
             else:
                 return response.text
     except Exception as ex:
+        frappe.log_error(frappe.get_traceback(), "Unable to get token")
         return ex
     
 
