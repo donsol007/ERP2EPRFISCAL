@@ -92,6 +92,7 @@ def send_invoice_to_cloud(
         devicesn = get_config_value("device_serial_number")
         data = json.loads(get_token())
         ftoken = data.get("message")
+        frappe.log_error(f"{devicesn} Send Invoice", "Invoice Sent")
         print("Sending Request to HavanoZimra")
         url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.sendinvoice"
         headers = {
