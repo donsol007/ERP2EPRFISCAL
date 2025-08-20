@@ -19,12 +19,9 @@ def get_config_value(fieldname: str) -> str:
     except Exception as e:
         frappe.log_error(frappe.get_traceback(),f"Error fetching {fieldname} from {doctype}: {e}")
         return None
-hcloud_baseurl = get_config_value("server_address")
-hcloud_key = get_config_value("api_key")
-hcloud_secret = get_config_value("api_secret")
-hcloud_devicesn = get_config_value("device_serial_number")
-ftoken  = ""
-s_invoice_name=""
+
+#ftoken  = ""
+#s_invoice_name=""
 
 @frappe.whitelist()
 def get_token2():
@@ -44,6 +41,7 @@ def get_token2():
 
 @frappe.whitelist()
 def get_token():
+    hcloud_baseurl = get_config_value("server_address")
     api_url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.token"
     print(api_url)
     result = ""
@@ -88,6 +86,10 @@ def send_invoice_to_cloud(
 ):
     try:
         #frappe.log_error("Token", get_token())
+        hcloud_baseurl = get_config_value("server_address")
+        hcloud_key = get_config_value("api_key")
+        hcloud_secret = get_config_value("api_secret")
+        devicesn = get_config_value("device_serial_number")
         data = json.loads(get_token())
         ftoken = data.get("message")
         print("Sending Request to HavanoZimra")
@@ -99,7 +101,7 @@ def send_invoice_to_cloud(
         }
 
         data = {
-            "device_sn": hcloud_devicesn,
+            "device_sn": devicesn,
             "add_customer": add_customer,
             "invoice_flag": invoice_flag,
             "currency": currency,
