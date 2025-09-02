@@ -90,9 +90,12 @@ def send_invoice_to_cloud(
         hcloud_key = get_config_value("api_key")
         hcloud_secret = get_config_value("api_secret")
         devicesn = get_config_value("device_serial_number")
+        if not all([hcloud_baseurl, hcloud_key, hcloud_secret, devicesn]):
+            msgprint("One or more user zimra information is missing, Please update Zimra Information")
+            return  "Cannot send invoice to zimra"
         data = json.loads(get_token())
         ftoken = data.get("message")
-        frappe.log_error(f"{devicesn} Send Invoice", "Invoice Sent")
+        frappe.log_error(f"{devicesn} Send Invoice", "Invoice Payload ready")
         print("Sending Request to HavanoZimra")
         url = f"{hcloud_baseurl}/api/method/havanozimracloud.api.sendinvoice"
         headers = {
@@ -100,7 +103,9 @@ def send_invoice_to_cloud(
             "Authorization": f"token {hcloud_key}:{hcloud_secret}",
             "Content-Type": "application/x-www-form-urlencoded"
         }
-
+        invoice_tax_type = 0
+        if bool(check_included_in_print_rate(invoice_number)):
+            invoice_tax_type = 1
         data = {
             "device_sn": devicesn,
             "add_customer": add_customer,
@@ -121,9 +126,10 @@ def send_invoice_to_cloud(
             "invoice_comment": invoice_comment,
             "original_invoice_no": original_invoice_no,
             "global_invoice_no": global_invoice_no,
-            "items_xml": items_xml
+            "items_xml": items_xml,
+            "invoice_type":invoice_tax_type
         }
-
+        #print(f"Tax type: {invoice_tax_type}")
         #print("URL:", url)
         #print("Payload:", data)
         with httpx.Client() as client:
@@ -300,6 +306,8 @@ def send(doc,method):
     itm_xml += "</ITEMS>"
     itm = remove_newlines(itm_xml)
     #print(itm)
+    
+
     response_msg =  send_invoice_to_cloud(
         addcus, iscreditnote, invoice_currency, invoice_number, customer, trade_name,
         cus_vat_no,cus_address,cus_no,cus_tin,cus_province,
@@ -318,5 +326,19 @@ def send(doc,method):
         frappe.log_error(frappe.get_traceback(),"Error Updateing Invoice")
         return response_msg
 
+def check_included_in_print_rate(invoice_id: str):
+    try:
+        tax = frappe.get_value(
+            "Sales Taxes and Charges",
+            {"parent": invoice_id},
+            "included_in_print_rate"
+        )
+        if tax is None:
+            return {"message": f"No Sales Taxes and Charges found for {invoice_id}"}
+        #print(f"Tax found {tax}")
+        return  tax
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Error in sales tax type")
+        return {"error": str(e)}
     
         
