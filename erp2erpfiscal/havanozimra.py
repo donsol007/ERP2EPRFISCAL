@@ -106,6 +106,8 @@ def send_invoice_to_cloud(
         invoice_tax_type = 0
         if bool(check_included_in_print_rate(invoice_number)):
             invoice_tax_type = 1
+        frappe.log_error("Invoice Tax Type",f"Invoice Tax type select: {invoice_tax_type}")
+        
         data = {
             "device_sn": devicesn,
             "add_customer": add_customer,
